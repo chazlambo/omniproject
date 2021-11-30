@@ -1,28 +1,29 @@
-#include <iostream>
 #include "multimagnet.hpp"
+#include <iostream>
 
 int main () {
+
 	Eigen::IOFormat CleanFmt(4,0, ", ", "\n", "[", "]", "\n", "\n");
-	int num_omni = 5;
-	std::vector<OmniMagnet> omnisystem(num_omni);
-	POS toolPos;
-	DIP toolDip;
-	WRENCH zdes(6);
+	// int num_omni = 5;
+	// std::vector<OmniMagnet> omnisystem(num_omni);
+	// POS toolPos;
+	// DIP toolDip;
+	// WRENCH zdes(6);
 
-	for(int i=0;i<num_omni;i++){
-		double j = i+1;
-		omnisystem[i].SetProp(j,j,j,j,j,j,j,j, true);
-		omnisystem[i].SetPosition({j,j,j});
-		omnisystem[i].mapping_ << j, j, j, j, j, j, j, j, j;
-	}
-
-
-	toolPos << 1.0, 2.0, 3.0;
-	toolDip << 4.0, 5.0, 6.0;
-	zdes << 10,10,0,10,0,0;
+	// for(int i=0;i<num_omni;i++){
+	// 	double j = i+1;
+	// 	omnisystem[i].SetProp(j,j,j,j,j,j,j,j, true);
+	// 	omnisystem[i].SetPosition({j,j,j});
+	// 	omnisystem[i].mapping_ << j, j, j, j, j, j, j, j, j;
+	// }
 
 
-	MultiMagnet multi(omnisystem);
+	// toolPos << 1.0, 2.0, 3.0;
+	// toolDip << 4.0, 5.0, 6.0;
+	// zdes << 10,10,0,10,0,0;
+
+
+	// MultiMagnet multi(omnisystem);
 
 
 	//CLASS DEFINE AND EDITING TESTING
@@ -82,20 +83,40 @@ int main () {
 	
 
 	//FINAL TEST
-	multi.UpdateDmat();
+	// multi.UpdateDmat();
 
-	multi.UpdateMmat(false);
+	// multi.UpdateMmat(false);
 
-	multi.UpdateAmat(toolPos,toolDip);
+	// multi.UpdateAmat(toolPos,toolDip);
 
-	Eigen::MatrixXd weightMat = Eigen::MatrixXd::Identity(15,15);
-	multi.SetWmat(weightMat);
+	// Eigen::MatrixXd weightMat = Eigen::MatrixXd::Identity(15,15);
+	// multi.SetWmat(weightMat);
 
-	Eigen::VectorXd sysCur;
-	sysCur = multi.Wrench2Current(zdes);
-	std::cout << sysCur.format(CleanFmt) << std::endl;
+	// Eigen::VectorXd sysCur;
+	// sysCur = multi.Wrench2Current(zdes);
+	// std::cout << sysCur.format(CleanFmt) << std::endl;
 
-	multi.SetSystemCurrent(sysCur);
+	// multi.SetSystemCurrent(sysCur);
 
 
+	//FORWARD KINEMATICS TEST
+	double a2 = 0;
+	double d1 = 0;
+	double d2 = 10;
+	double d3 = 10;
+	double theta1 = 0;
+	double theta4 = 0;
+
+	double W = 10;
+	double H = 10;
+
+	DHPARAMS dhparam;
+	dhparam << d1, theta1, a2, d2, d3, theta4;
+
+	TRANSMAT arm2cent = Eigen::MatrixXd::Identity(4,4);
+	arm2cent(0,3) = W;
+	arm2cent(1,3) = H;
+
+	TRANSMAT FK1 = ArmFK(dhparam, arm2cent);
+	std::cout << FK1.format(CleanFmt) << std::endl;
 }

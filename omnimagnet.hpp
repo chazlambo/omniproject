@@ -11,7 +11,7 @@ OmniMagnet.h  (requires omnimagnet.cpp)  defines a class which
 Omnimangnet local frame: out:Z, mid:Y, in:X
 Ver 1.0 by Ashkan July-2019		
 *****************************************************/
-#include "type.hpp" // defines the matrix types. 
+#include "types.hpp" // defines the matrix types. 
 class OmniMagnet {
 	public:
 		int subdev = 0;     /* change this to your input subdevice */
